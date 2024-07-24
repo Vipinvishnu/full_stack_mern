@@ -7,7 +7,7 @@ const projectserver = express();
 projectserver.use(cors());
 
 const routes = require("./Routes/routes");
-require('./db/connection')
+require("./db/connection");
 
 projectserver.use(express.json());
 
