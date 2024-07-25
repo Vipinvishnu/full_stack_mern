@@ -1,3 +1,5 @@
+
+
 import axios from "axios";
 
 export const commonApi=async(method,url,reqBody,reqHeader)=>{
@@ -7,9 +9,10 @@ export const commonApi=async(method,url,reqBody,reqHeader)=>{
         data:reqBody,
         headers:reqHeader?reqHeader:{"Content-Type":"application/json"}
     }
-    await axios(config).then(result=>{
-        return result
+   return await axios(config).then(result=>{
+       return result
     }).catch(result=>{
         return result
-    })
+})
 }
+

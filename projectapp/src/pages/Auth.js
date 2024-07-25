@@ -1,11 +1,136 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Col, Row } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
+import { loginApi, registerApi } from '../service/allApi';
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
+  
 
 
 function Auth({ register }) {
+  const navigate=useNavigate()
+
+  //state to store  data
+
+  const [user,setUser]=useState({
+    userName:"", email:"", password:""
+  })
+
+
+  const setInputs=(e)=>{
+    const {name,value}=e.target
+    setUser({...user,[name]:value})
+  }
+console.log(user);
+
+
+const handleRegister=async(e)=>{
+  e.preventDefault()
+  const {userName,email,password}=user
+  if(!userName || !email || !password){
+    
+    toast.error("please fill all the data", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      });
+    
+  }
+  else{
+   const result=await registerApi(user)
+  //  console.log(result);
+  if(result.status===200){
+    toast.success(`${result.data.userName} your account created successfully`, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      });
+    //reset user state
+    setUser( {userName:"", email:"", password:""})
+    navigate('/login')
+    
+  }
+  else{
+    
+    toast.error(result.response.data, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      });
+  }
+  }
+}
+
+
+const handleLogin=async(e)=>{
+  e.preventDefault()
+  const {email,password}=user
+  if(!email || !password){
+    
+    toast.error("please fill all the data", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      });
+    
+  }
+  else{
+   const result=await loginApi(user)
+  //  console.log(result);
+  if(result.status===200){
+    toast.success(`${result.data}login successfully`, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      });
+    //reset user state
+    setUser( {email:"", password:""})
+    navigate('/')
+    
+  }
+  else{
+    
+    toast.error(result.response.data, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      });
+  }
+  }
+}
+
 
   const isRegisterForm = register ? true : false
 
@@ -30,7 +155,9 @@ function Auth({ register }) {
               {
                 isRegisterForm &&
                 <FloatingLabel controlId="floatingPassword" label="User Name " className='mb-3'>
-                  <Form.Control type="text" placeholder="User Name" />
+
+                  <Form.Control value={user.userName} onChange={(e)=>setInputs(e)} name="userName"
+                   type="text" placeholder="User Name" />
                 </FloatingLabel>
               }
               <FloatingLabel
@@ -38,18 +165,21 @@ function Auth({ register }) {
                 label="Email address"
                 className="mb-3"
               >
-                <Form.Control type="email" placeholder="name@example.com" />
+                <Form.Control value={user.email}  onChange={(e)=>setInputs(e)} name="email"
+                type="email" placeholder="name@example.com" />
               </FloatingLabel>
+
               <FloatingLabel controlId="floatingPassword" label="Password " className='mb-3'>
-                <Form.Control type="password" placeholder="Password" />
+                <Form.Control value={user.password}   onChange={(e)=>setInputs(e)} name="password"
+                type="password" placeholder="Password" />
               </FloatingLabel>
 
               <div className='text-center mt-5'>
                 {
                   isRegisterForm ?
-                    <Button className='btn btn-dark rounded-pill px-4 py-2 '>Register</Button>
+                    <Button onClick={(e)=>handleRegister(e)} className='btn btn-dark rounded-pill px-4 py-2 '>Register</Button>
                     :
-                    <Link to={'/dashboard'} className='btn btn-dark rounded-pill px-4 py-2'>Login</Link>
+                    <Button onClick={(e)=>handleLogin(e)} className='btn btn-dark rounded-pill px-4 py-2'>Login</Button>
 
                 }
                 <div className='mt-3'>
@@ -69,7 +199,7 @@ function Auth({ register }) {
 
 
       </div>
-
+ <ToastContainer />
     </div>
   )
 }
