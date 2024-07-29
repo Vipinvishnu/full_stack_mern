@@ -1,4 +1,5 @@
 const users = require("../Model/userModel");
+const jwt=require("jsonwebtoken")
 
 exports.register = async (req, res) => {
   const { userName, email, password } = req.body;
@@ -35,8 +36,13 @@ exports.login=async(req,res)=>{
     try{
          const existUser = await users.findOne({email,password})
          if(existUser){
+            //login success-token generate
+      const token=  jwt.sign({_id:existUser._id},"supersecretkey123")
+      console.log(token);
+
             res.status(200).json({
-                user:existUser
+                user:existUser,
+                token
             })
          }
          else{

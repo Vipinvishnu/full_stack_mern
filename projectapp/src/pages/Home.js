@@ -63,7 +63,7 @@ function Home() {
                 <h1 className="text-center mb-5">
                     <strong>Explore Projects</strong>
                 </h1>
-
+{/* 
                 <Container>
                     <marquee scrollAmount={25}>
                         <div className="d-flex justify-content-between">
@@ -78,7 +78,23 @@ function Home() {
                             </div>
                         </div>
                     </marquee>
-                </Container>
+                </Container> */}
+
+
+<div className="marquee">
+    <div className="d-flex justify-content-between">
+        <div>
+            <ProjectCard />
+        </div>
+        <div>
+            <ProjectCard />
+        </div>
+        <div>
+            <ProjectCard />
+        </div>
+    </div>
+</div>
+
 
                 <div className="text-center m-5">
                     <Link
