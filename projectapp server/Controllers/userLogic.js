@@ -35,7 +35,9 @@ exports.login=async(req,res)=>{
     try{
          const existUser = await users.findOne({email,password})
          if(existUser){
-            res.status(200).json("login successfully")
+            res.status(200).json({
+                user:existUser
+            })
          }
          else{
              res.status(404).json("incorrect email or password ")

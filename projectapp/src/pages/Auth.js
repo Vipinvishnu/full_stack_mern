@@ -9,8 +9,18 @@ import { ToastContainer, toast } from 'react-toastify';
   
 
 
-function Auth({ register }) {
+function Auth({ register }) 
+{
+  
   const navigate=useNavigate()
+
+  //state to check validation
+
+  const [unameValid,setUnameValid]=useState(false)
+
+  const [emailValid,setEmailValid]=useState(false)
+  const [passwordValid,setPasswordValid]=useState(false)
+
 
   //state to store  data
 
@@ -21,8 +31,51 @@ function Auth({ register }) {
 
   const setInputs=(e)=>{
     const {name,value}=e.target
-    setUser({...user,[name]:value})
+   setUser({...user,[name]:value})
+
+    if(name=="userName")
+      {
+           if(value.match(/^[a-zA-Z ]+$/))
+            {
+            setUnameValid(false)
+            // setUser({...user,[name]:value})
+
+           }
+           else{
+            setUnameValid(true)
+           }
+    }
+
+    if(name=="email")
+      {
+      if(value.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[c][o][m]$/))
+       {
+       setEmailValid(false)
+
+      }
+      else{
+       setEmailValid(true)
+      }
+     }
+
+     if(name=="password"){
+      if(value.match(/^[a-zA-z0-9@]{10}$/))
+       {
+       setPasswordValid(false)
+
+      }
+      else{
+       setPasswordValid(true)
+      }
+}
+
+
+
+
+
+    // setUser({...user,[name]:value})
   }
+
 console.log(user);
 
 
@@ -100,7 +153,12 @@ const handleLogin=async(e)=>{
    const result=await loginApi(user)
   //  console.log(result);
   if(result.status===200){
-    toast.success(`${result.data}login successfully`, {
+    //store data in local storage
+    localStorage.setItem("current_user",result.data.user.userName);
+    localStorage.setItem("current_id",result.data.user._id);
+    
+
+    toast.success(`login successfully`, {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -152,14 +210,23 @@ const handleLogin=async(e)=>{
               }
             </h1>
             <div className='mt-5'>
-              {
-                isRegisterForm &&
-                <FloatingLabel controlId="floatingPassword" label="User Name " className='mb-3'>
+              
+               
+                  {
+                    
+                       isRegisterForm &&
+                     <>
+                     <FloatingLabel controlId="floatingPassword" label="User Name " className='mb-3'>
+                    <Form.Control value={user.userName} onChange={(e)=>setInputs(e)} name="userName"
+                     type="text" placeholder="User Name" />
+                  </FloatingLabel>
+                  
+                    { unameValid &&
+                      <p className='text-primary'>include characters only</p>}
+                   </>
+               }
 
-                  <Form.Control value={user.userName} onChange={(e)=>setInputs(e)} name="userName"
-                   type="text" placeholder="User Name" />
-                </FloatingLabel>
-              }
+
               <FloatingLabel
                 controlId="floatingInput"
                 label="Email address"
@@ -169,10 +236,22 @@ const handleLogin=async(e)=>{
                 type="email" placeholder="name@example.com" />
               </FloatingLabel>
 
+
+                { emailValid &&   
+                  <p className='text-primary'>Email is not valid</p>
+                }              
+
+
               <FloatingLabel controlId="floatingPassword" label="Password " className='mb-3'>
                 <Form.Control value={user.password}   onChange={(e)=>setInputs(e)} name="password"
                 type="password" placeholder="Password" />
               </FloatingLabel>
+
+
+              {    passwordValid &&         
+               <p className='text-primary'>invalid password  </p>
+               }
+
 
               <div className='text-center mt-5'>
                 {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import "./Home.css";
 import ProjectCard from "../components/ProjectCard";
@@ -6,6 +6,17 @@ import { Link } from "react-router-dom";
 import Header from "../components/Header";
 
 function Home() {
+    const [isloggedin,setloggedin]=useState(false)
+
+    useEffect(()=>{
+        if(localStorage.getItem("current_id")){
+            setloggedin(true)
+        }
+
+    },[])
+    // console.log(isloggedin);
+
+
     return (
         <div id="secl">
             <Header></Header>
@@ -19,14 +30,25 @@ function Home() {
                         User Can Add And Manage Their Projects.As Well As Access All
                         Projects Available In Our Website.What Are You Waiting For !
                     </p>
-                    <Link
-                        to={"/login"}
+
+                    { isloggedin?
+                        <Link to={"/dashboard"}
                         className=" text-info mt-5 btn btn-outline-dark  rounded-pill w-25 px-5 border border-dark"
                     >
-                        <i class="fa-solid fa-arrow-left fa-fade "></i>{" "}
-                        <strong>start</strong>
+                        <i class="fa-solid fa-arrow-left fa-fade "></i>
+                        <strong>Explore</strong>
                         <i class="fa-solid fa-arrow-right fa-fade"></i>
-                    </Link>
+                    </Link>:
+                    <Link to={"/login"}
+                    className=" text-info mt-5 btn btn-outline-dark  rounded-pill w-25 px-5 border border-dark"
+                >
+                    <i class="fa-solid fa-arrow-left fa-fade "></i>
+                    <strong>start</strong>
+                    <i class="fa-solid fa-arrow-right fa-fade"></i>
+                </Link>
+
+                    }
+
                 </Col>
 
                 <Col>
