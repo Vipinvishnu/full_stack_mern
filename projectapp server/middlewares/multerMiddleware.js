@@ -22,7 +22,7 @@ const fileFilter=(req,file,callback)=>{
 }
 
 
-//mu;ter middleware creation
+//multer middleware creation
 
 const upload=multer({storage,fileFilter})
 module.exports= upload
