@@ -17,3 +17,6 @@ export const loginApi = async (body) => {
 export const updateProfile = async (body, headers,id) => {
   return await commonApi("PUT", `${BASE_URL}/user/update-profile/${id}`, body,headers);
 };
+
+export const getprofileApi=async(id)=>{
+  return await commonApi("GET",`${BASE_URL}/user/getprofile/${id}`,{},"")}

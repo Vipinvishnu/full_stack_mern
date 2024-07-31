@@ -80,3 +80,20 @@ exports.editprofile = async (req, res) => {
     res.status(401).json(`Login Api Failed ${err}`);
   }
 };
+
+exports.getprofile=async(req,res)=>{
+  const {_id}=req.params
+  try {
+    const UserData=await users.findOne({_id})
+    if(UserData){
+res.status(200).json(UserData)
+    }
+    else
+    {
+res.status(404).json("user not found")
+    }
+  } catch (error) {
+    res.status(401).json(`get Profile  Api Failed${error}`)
+  }
+}
+

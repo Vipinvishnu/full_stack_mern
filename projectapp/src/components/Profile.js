@@ -3,22 +3,24 @@ import { Col, Container, Row } from "react-bootstrap";
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { Link } from "react-router-dom";
-import { updateProfile } from "../service/allApi";
-import { GitHub } from "react-feather";
+import { getprofileApi, updateProfile } from "../service/allApi";
+import "react-toastify/dist/ReactToastify.css";
+import { BASE_URL } from "../service/baseUrl";
+
 
 function Profile({ userName }) {
   const [show, setShow] = useState(false);
 
   const [preview, setPreview] = useState("");
 
+
   const handleClose = () => {
     setShow(false);
-    setProfile({
-      image: "",
-      GitHub: "",
-      LinkedIn: "",
-    });
+    // setProfile({
+    //   image: "",
+    //   GitHub: "",
+    //   LinkedIn: "",
+    // });
   };
   const handleShow = () => setShow(true);
 
@@ -28,6 +30,35 @@ function Profile({ userName }) {
     GitHub: "",
     LinkedIn: "",
   });
+
+
+  //api call
+  const getprofile = async () => {
+    //id
+    if (localStorage.getItem("current_id")) {
+      let id = localStorage.getItem("current_id")
+      const result = await getprofileApi(id)
+      // console.log(result.data);
+
+      //update the data in profile state
+      setProfile({
+        ...profile,
+        user: result.data.userName,
+        GitHub: result.data.github,
+        LinkedIn: result.data.linkedIn,
+        updatedImg: result.data.profile
+      })
+    }
+  }
+
+  useEffect(() => {
+
+    getprofile()
+  }, [])
+
+  console.log(profile);
+
+
 
   const setData = (e) => {
     const { value, name } = e.target;
@@ -67,11 +98,17 @@ function Profile({ userName }) {
 
         console.log(response);
 
-        if (response.status == 200) {
-          alert("profile updated");
+        if (response.status === 200) {
+          alert(response.data);
           handleClose();
+
+          //refresh profile data
+          getprofile()
+          //update now username in local storage
+          localStorage.setItem("current_user", profile.userName)
         } else {
           alert("profile updation failed");
+
         }
       }
     }
@@ -94,20 +131,18 @@ function Profile({ userName }) {
       <div className="text-center">
         <img
           className="mt-3 w-25 mb-3 rounded"
-          src={preview ? preview : "https://i.postimg.cc/QtHmmRPC/female.jpg"}
+          src={profile?.updatedImg?`${BASE_URL}/uploads/${profile.updatedImg}`:"https://i.postimg.cc/QtHmmRPC/female.jpg"}
           alt=""
         />
       </div>
       <Container>
         <hr className="text-primary" />
-        <p className="py-3  ">
-          {" "}
-          User Name :<b className="text-primary mx-3 fs-3 "> {userName}</b>
+        <p className="py-3  ">User Name :<b className="text-primary mx-3 fs-3 "> {profile.user}</b>
         </p>
         <hr className="text-primary" />
-        <p className="py-3">Github</p>
+        <p className="py-3">Github :<b style={{ color: "blueviolet" }}> {profile?.GitHub}</b></p>
         <hr className="text-primary" />
-        <p className="py-3">LinkedIn</p>
+        <p className="py-3 ">LinkedIn  :<b style={{ color: "blue" }}> {profile?.LinkedIn}</b> </p>
         <hr className="text-primary" />
 
         <p className="text-end pt-5 ">
@@ -131,11 +166,16 @@ function Profile({ userName }) {
           <Modal.Body>
             <label htmlFor="img1" className="text-center">
               <input onChange={(e) =>
-                  setProfile({ ...profile, ["image"]: e.target.files[0] })
-                }
+                // setProfile({ ...profile,["image"]:e.target.files[0] })
+                setProfile({
+                  ...profile,
+                  image: e.target.files[0]
+                })
+
+              }
                 id="img1" style={{ display: "none" }} type="file"
               />
-              <img className="mt-3 w-50 rounded  mb-3   "style={{ textAlign: "center" }}
+              <img className="mt-3 w-50 rounded  mb-3   " style={{ textAlign: "center" }}
                 src={preview ? preview : "https://i.postimg.cc/QtHmmRPC/female.jpg"}
                 alt=""
               />
