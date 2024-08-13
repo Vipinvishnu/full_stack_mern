@@ -10,7 +10,7 @@ function Dashboard() {
     const [uname,setUname]=useState("")
         useEffect(()=>{
             if(localStorage.getItem("current_user")){
-                setUname(localStorage.getItem("current_user"))
+                setUname((JSON.parse(localStorage.getItem("current_user"))).userName)
 
             }
         },[])
@@ -28,7 +28,7 @@ function Dashboard() {
                 </Col>
                 <Col lg={4}>
                     <div className='py-5 px-3 mx-2 my-5 shadow bg-white'>
-                        <Profile userName={uname}></Profile>
+                        <Profile></Profile>
                     </div>
                 </Col>
             </Row>

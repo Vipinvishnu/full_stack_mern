@@ -29,7 +29,7 @@ function Auth({ register }) {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
 
-    if (name == "userName") {
+    if (name === "userName") {
       if (value.match(/^[a-zA-Z ]+$/)) {
         setUnameValid(false);
         // setUser({...user,[name]:value})
@@ -38,7 +38,7 @@ function Auth({ register }) {
       }
     }
 
-    if (name == "email") {
+    if (name === "email") {
       if (value.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[c][o][m]$/)) {
         setEmailValid(false);
       } else {
@@ -46,7 +46,7 @@ function Auth({ register }) {
       }
     }
 
-    if (name == "password") {
+    if (name === "password") {
       if (value.match(/^[a-zA-z0-9@]{10}$/)) {
         setPasswordValid(false);
       } else {
@@ -92,7 +92,7 @@ function Auth({ register }) {
         );
         //reset user state
         setUser({ userName: "", email: "", password: "" });
-        navigate("/login");
+        navigate("/");
       } else {
         toast.error(result.response.data, {
           position: "top-center",
@@ -130,10 +130,9 @@ function Auth({ register }) {
         // console.log(result.data.token);
 
 
-        //store data in session storage
-        sessionStorage.setItem("token", result.data.token);
-
-        localStorage.setItem("current_user", result.data.user.userName);
+        //store data inlocal storage
+        localStorage.setItem("token", result.data.token);
+        localStorage.setItem("current_user", JSON.stringify(result.data.user));
         localStorage.setItem("current_id", result.data.user._id);
 
         toast.success(`login successfully`, {

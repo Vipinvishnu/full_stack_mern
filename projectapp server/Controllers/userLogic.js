@@ -43,7 +43,7 @@ exports.login = async (req, res) => {
 
       res.status(200).json({
         user: existUser,
-        token,
+        token
       });
     } else {
       res.status(404).json("incorrect email or password ");
@@ -81,19 +81,16 @@ exports.editprofile = async (req, res) => {
   }
 };
 
-exports.getprofile=async(req,res)=>{
-  const {_id}=req.params
+exports.getprofile = async (req, res) => {
+  const { _id } = req.params;
   try {
-    const UserData=await users.findOne({_id})
-    if(UserData){
-res.status(200).json(UserData)
-    }
-    else
-    {
-res.status(404).json("user not found")
+    const UserData = await users.findOne({ _id });
+    if (UserData) {
+      res.status(200).json(UserData);
+    } else {
+      res.status(404).json("user not found");
     }
   } catch (error) {
-    res.status(401).json(`get Profile  Api Failed${error}`)
+    res.status(401).json(`get Profile  Api Failed${error}`);
   }
-}
-
+};
