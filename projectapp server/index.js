@@ -14,7 +14,7 @@ projectserver.use(express.json());
 projectserver.use(routes);
 
 //EXPOrt uploads folder to client
-projectserver.use('/uploads',express.static('./uploads'))
+projectserver.use("/uploads", express.static("./uploads"));
 
 const PORT = 8000 || process.env.PORT;
 

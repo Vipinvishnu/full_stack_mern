@@ -148,7 +148,7 @@ function Auth({ register }) {
         });
         //reset user state
         setUser({ email: "", password: "" });
-        navigate("/");
+        navigate("/Home");
       } else {
         toast.error(result.response.data, {
           position: "top-center",

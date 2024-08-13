@@ -12,7 +12,7 @@ function Profile({ userName }) {
   const [show, setShow] = useState(false);
 
   const [preview, setPreview] = useState("");
-
+ const [token,setToken]=useState("")
 
   const handleClose = () => {
     setShow(false);
@@ -54,9 +54,14 @@ function Profile({ userName }) {
   useEffect(() => {
 
     getprofile()
-  }, [])
+    if(sessionStorage.getItem("token")){
+      setToken(sessionStorage.getItem("token"))
+    }
+  },[])
+  console.log(token);
+  
 
-  console.log(profile);
+  // console.log(profile);
 
 
 
@@ -64,13 +69,13 @@ function Profile({ userName }) {
     const { value, name } = e.target;
     setProfile({ ...profile, [name]: value });
   };
-  // console.log(profile);
+  console.log(profile);
   useEffect(() => {
     if (profile.image) {
       setPreview(URL.createObjectURL(profile.image));
     }
   }, [profile.image]);
-  console.log(preview);
+  // console.log(preview);
 
   const handleupdate = async (e) => {
     e.preventDefault();
@@ -85,8 +90,10 @@ function Profile({ userName }) {
         //header
         const reqHeader = {
           "Content-Type": "multipart/form-data",
-        };
+          "access_token" :`Bearer ${token}`
+        }; 
         console.log(reqHeader);
+
         //body
         const reqBody = new FormData();
         reqBody.append("userName", userName);
@@ -137,12 +144,12 @@ function Profile({ userName }) {
       </div>
       <Container>
         <hr className="text-primary" />
-        <p className="py-3  ">User Name :<b className="text-primary mx-3 fs-3 "> {profile.user}</b>
+        <p className="py-3  ">User Name :<b className=" mx-3 fs-3 "> {profile.user}</b>
         </p>
         <hr className="text-primary" />
-        <p className="py-3">Github :<b style={{ color: "blueviolet" }}> {profile?.GitHub}</b></p>
+        <p className="py-3">Github :<b > {profile?.GitHub}</b></p>
         <hr className="text-primary" />
-        <p className="py-3 ">LinkedIn  :<b style={{ color: "blue" }}> {profile?.LinkedIn}</b> </p>
+        <p className="py-3 ">LinkedIn  :<b > {profile?.LinkedIn}</b> </p>
         <hr className="text-primary" />
 
         <p className="text-end pt-5 ">
@@ -166,11 +173,11 @@ function Profile({ userName }) {
           <Modal.Body>
             <label htmlFor="img1" className="text-center">
               <input onChange={(e) =>
-                // setProfile({ ...profile,["image"]:e.target.files[0] })
-                setProfile({
-                  ...profile,
-                  image: e.target.files[0]
-                })
+                setProfile({ ...profile,["image"]:e.target.files[0] })
+                // setProfile({
+                //   ...profile,
+                //   image: e.target.files[0]
+                // })
 
               }
                 id="img1" style={{ display: "none" }} type="file"

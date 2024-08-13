@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import "./Home.css";
 import ProjectCard from "../components/ProjectCard";
 import { Link } from "react-router-dom";
