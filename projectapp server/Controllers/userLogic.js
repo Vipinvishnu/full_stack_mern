@@ -54,9 +54,9 @@ exports.login = async (req, res) => {
 };
 
 exports.editprofile = async (req, res) => {
-  const { userName, github, linkedIn } = req.body;
+  const { userName, github, linkedIn,profile} = req.body;
   const { _id } = req.params;
-  const profile = req.file.filename;
+  const profile1 = req.file?req.file.filename:profile
 
   //   console.log(userName);
   //   console.log(_id);
@@ -68,11 +68,11 @@ exports.editprofile = async (req, res) => {
       selectedUser.userName = userName;
       selectedUser.github = github;
       selectedUser.linkedIn = linkedIn;
-      selectedUser.profile = profile;
+      selectedUser.profile = profile1;
 
       //save changes in mongodb
       await selectedUser.save();
-      res.status(200).json(` ${userName} profile updated`);
+      res.status(200).json(selectedUser);
     } else {
       res.status(400).json(` ${userName} is not present`);
     }
